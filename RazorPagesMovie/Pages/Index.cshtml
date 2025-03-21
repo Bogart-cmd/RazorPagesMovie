@@ -1,0 +1,60 @@
+﻿@page
+@model RazorPagesMovie.Pages.IndexModel
+
+@{
+    ViewData["Title"] = "Schmoovies";
+}
+
+<div class="container mx-auto py-8">
+    <h1 class="text-4xl font-bold text-white mb-6">Movies</h1>
+
+    <div class="relative w-full mx-auto overflow-hidden">
+        <div class="flex transition-transform duration-500 ease-in-out" id="carousel">
+            @foreach (var item in Model.Movie)
+            {
+                <div class="flex-shrink-0 w-64 mx-2">
+                    <div class="bg-gray-800 rounded-lg shadow-lg overflow-hidden transition-transform duration-300 hover:scale-105">
+                        <a asp-page="./Details" asp-route-id="@item.Id">
+                            <img src="~/images/movies/placeholder.png"
+                                 alt="@item.Title"
+                                 class="w-full h-full object-cover cursor-pointer">
+                        </a>
+                    </div>
+                </div>
+            }
+        </div>
+
+    </div>
+
+    <button onclick="moveSlide(-1)"
+            class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-3 rounded-full hover:bg-opacity-75 z-10">
+        ◀
+    </button>
+    <button onclick="moveSlide(1)"
+            class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-3 rounded-full hover:bg-opacity-75 z-10">
+        ▶
+    </button>
+</div>
+
+<script>
+    let index = 0;
+    const carousel = document.getElementById('carousel');
+    const cards = document.querySelectorAll('#carousel > div');
+    const cardWidth = cards[0].offsetWidth + 16;
+
+    function moveSlide(direction) {
+        const totalCards = cards.length;
+        const maxIndex = totalCards - Math.floor(carousel.offsetWidth / cardWidth);
+
+        index += direction;
+
+        if (index < 0) {
+            index = 0;
+        } else if (index > maxIndex) {
+            index = maxIndex;
+        }
+
+        const offset = -index * cardWidth;
+        carousel.style.transform = `translateX(${offset}px)`;
+    }
+</script>

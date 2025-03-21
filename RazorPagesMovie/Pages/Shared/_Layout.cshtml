@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - RazorPagesMovie</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/RazorPagesMovie.styles.css" asp-append-version="true" />
+</head>
+<body class="bg-cover bg-center bg-no-repeat min-h-screen flex flex-col relative" style="background-image: url('/images/main-bg.jpg');">
+
+    <div class="absolute inset-0 bg-black bg-opacity-50 -z-10"></div>
+
+    <header class="bg-[#434343] text-white shadow-md z-10">
+        <nav class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <a href="/" class="text-2xl text-white !text-white font-bold hover:text-gray-400">Schmoovies</a>
+            <div class="flex space-x-6">
+                <a asp-area="" asp-page="/Index" class="hover:text-gray-400">Home</a>
+                <a asp-area="" asp-page="/Privacy" class="hover:text-gray-400">Privacy</a>
+                <a asp-area="" asp-page="/Manage" class="hover:text-gray-400">Manage</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="flex-grow container mx-auto py-8 z-10">
+        <div>
+            @RenderBody()
+        </div>
+    </main>
+
+    <footer class="bg-[#434343] text-white py-4 z-10">
+        <div class="container mx-auto text-center">
+            &copy; 2025 - RazorPagesMovie -
+            <a asp-area="" asp-page="/Privacy" class="hover:text-gray-400">Privacy</a>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
