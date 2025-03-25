@@ -1,55 +1,65 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using RazorPagesMovie.Data;
 using RazorPagesMovie.Models;
-using Microsoft.EntityFrameworkCore;
+using System.IO;
 
-namespace RazorPagesMovie.Pages
+namespace RazorPagesMovie.Pages;
+
+public class CreateModel : PageModel
 {
-    public class CreateModel : PageModel
+    private readonly RazorPagesMovie.Data.RazorPagesMovieContext _context;
+    private readonly IWebHostEnvironment _environment;
+
+    public CreateModel(RazorPagesMovie.Data.RazorPagesMovieContext context, IWebHostEnvironment environment)
     {
-        private readonly RazorPagesMovie.Data.RazorPagesMovieContext _context;
+        _context = context;
+        _environment = environment;
+    }
 
-        public CreateModel(RazorPagesMovie.Data.RazorPagesMovieContext context)
-        {
-            _context = context;
-        }
+    [BindProperty]
+    public Movie Movie { get; set; } = default!;
 
-        public IActionResult OnGet()
+    public IActionResult OnGet()
+    {
+        ViewData["GenreId"] = new SelectList(_context.Genre, "Id", "Name");
+        return Page();
+    }
+
+    public async Task<IActionResult> OnPostAsync(IFormFile? ThumbnailFile)
+    {
+        if (!ModelState.IsValid)
         {
-            // Load genres into a dropdown list
             ViewData["GenreId"] = new SelectList(_context.Genre, "Id", "Name");
             return Page();
         }
 
-        [BindProperty]
-        public Movie Movie { get; set; } = default!;
-
-        public async Task<IActionResult> OnPostAsync()
+        if (ThumbnailFile != null && ThumbnailFile.Length > 0)
         {
-            if (!ModelState.IsValid)
+            // Create uploads folder if it doesn't exist
+            var uploadsFolder = Path.Combine(_environment.WebRootPath, "images/movies");
+            if (!Directory.Exists(uploadsFolder))
             {
-                // Reload the genres in case of validation errors
-                ViewData["GenreId"] = new SelectList(_context.Genre, "Id", "Name");
-                return Page();
+                Directory.CreateDirectory(uploadsFolder);
             }
 
-            // Attach the genre reference
-            var genre = await _context.Genre.FindAsync(Movie.GenreId);
-            if (genre != null)
+            // Generate a unique filename
+            var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(ThumbnailFile.FileName);
+            var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+            // Save the image file
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
             {
-                Movie.GenreRef = genre;
+                await ThumbnailFile.CopyToAsync(fileStream);
             }
 
-            _context.Movie.Add(Movie);
-            await _context.SaveChangesAsync();
-
-            return RedirectToPage("./Index");
+            // Store the relative URL in the database
+            Movie.ThumbnailUrl = $"/images/movies/{uniqueFileName}";
         }
+
+        _context.Movie.Add(Movie);
+        await _context.SaveChangesAsync();
+
+        return RedirectToPage("./Index");
     }
 }

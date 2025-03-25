@@ -5,39 +5,48 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<div class="flex justify-center items-start bg-gray-900 min-h-screen py-12">
+    <div class="bg-gray-800 p-8 rounded-lg shadow-lg max-w-4xl w-full mx-auto">
+        <div class="flex items-start space-x-8">
 
-<div>
-    <h4>Movie</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Movie.Title)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Movie.Title)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Movie.ReleaseDate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Movie.ReleaseDate)
-        </dd>
-        <dt class="col-sm-2">
-            Genre
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Movie.GenreRef!.Name)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Movie.Price)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Movie.Price)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-page="./Edit" asp-route-id="@Model.Movie.Id">Edit</a> |
-    <a asp-page="./Index">Back to List</a>
+            <!-- Image container -->
+            <div>
+                <img src="@Model.Movie.ThumbnailUrl" alt="Movie Thumbnail"
+                     class="max-w-none h-auto max-h-72 object-cover rounded-md shadow-md" />
+            </div>
+
+            <!-- Movie details -->
+            <div class="w-3/4 text-white">
+                <h2 class="text-3xl font-semibold mb-4">@Model.Movie.Title</h2>
+
+                <div class="space-y-4">
+                    <div>
+                        <span class="font-bold">Release Date:</span>
+                        <span class="text-gray-300">@Html.DisplayFor(model => model.Movie.ReleaseDate)</span>
+                    </div>
+
+                    <div>
+                        <span class="font-bold">Genre:</span>
+                        <span class="text-gray-300">@Html.DisplayFor(model => model.Movie.GenreRef!.Name)</span>
+                    </div>
+
+                    <div>
+                        <span class="font-bold">Price:</span>
+                        <span class="text-gray-300">$@Html.DisplayFor(model => model.Movie.Price)</span>
+                    </div>
+                </div>
+
+                <div class="mt-6">
+                    <a asp-page="./Edit" asp-route-id="@Model.Movie.Id"
+                       class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg shadow-md transition">
+                        Edit
+                    </a>
+                    <a asp-page="./Index"
+                       class="ml-4 px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg shadow-md transition">
+                        Back to List
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

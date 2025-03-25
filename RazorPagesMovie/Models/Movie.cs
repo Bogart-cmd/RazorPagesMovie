@@ -14,9 +14,10 @@ public class Movie
     [Column(TypeName = "decimal(18, 2)")]
     public decimal Price { get; set; }
 
-    // Foreign key
     public int GenreId { get; set; }
 
-    // Navigation property
     public Genre? GenreRef { get; set; }
+
+    [Url]
+    public string? ThumbnailUrl { get; set; }
 }

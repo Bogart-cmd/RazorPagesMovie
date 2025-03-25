@@ -1,6 +1,5 @@
 ﻿@page "{id:int}"
 @model RazorPagesMovie.Pages.EditModel
-
 @{
     ViewData["Title"] = "Edit";
 }
@@ -9,42 +8,64 @@
 
 <h4>Movie</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <input type="hidden" asp-for="Movie.Id" />
+<div class="container mx-auto">
+    <div class="row">
+        <div class="col-md-6">
+            <form method="post" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <div class="form-group">
-                <label asp-for="Movie.Title" class="control-label"></label>
-                <input asp-for="Movie.Title" class="form-control" />
-                <span asp-validation-for="Movie.Title" class="text-danger"></span>
-            </div>
+                <input type="hidden" asp-for="Movie.Id" />
 
-            <div class="form-group">
-                <label asp-for="Movie.ReleaseDate" class="control-label"></label>
-                <input asp-for="Movie.ReleaseDate" class="form-control" />
-                <span asp-validation-for="Movie.ReleaseDate" class="text-danger"></span>
-            </div>
+                <div class="form-group">
+                    <label asp-for="Movie.Title" class="control-label"></label>
+                    <input asp-for="Movie.Title" class="form-control" />
+                    <span asp-validation-for="Movie.Title" class="text-danger"></span>
+                </div>
 
-            <div class="form-group">
-                <label asp-for="Movie.GenreId" class="control-label">Genre</label>
-                <select asp-for="Movie.GenreId" asp-items="Model.Genres" class="form-control"></select>
-                <span asp-validation-for="Movie.GenreId" class="text-danger"></span>
-            </div>
+                <div class="form-group">
+                    <label asp-for="Movie.ReleaseDate" class="control-label"></label>
+                    <input asp-for="Movie.ReleaseDate" class="form-control" />
+                    <span asp-validation-for="Movie.ReleaseDate" class="text-danger"></span>
+                </div>
 
-            <div class="form-group">
-                <label asp-for="Movie.Price" class="control-label"></label>
-                <input asp-for="Movie.Price" class="form-control" />
-                <span asp-validation-for="Movie.Price" class="text-danger"></span>
-            </div>
+                <div class="form-group">
+                    <label asp-for="Movie.GenreId" class="control-label">Genre</label>
+                    <select asp-for="Movie.GenreId" asp-items="Model.Genres" class="form-control"></select>
+                    <span asp-validation-for="Movie.GenreId" class="text-danger"></span>
+                </div>
 
-            <div class="form-group mt-3">
-                <input type="submit" value="Save" class="btn btn-primary" />
-                <a asp-page="./Index" class="btn btn-secondary">Back to List</a>
-            </div>
-        </form>
+                <div class="form-group">
+                    <label asp-for="Movie.Price" class="control-label"></label>
+                    <input asp-for="Movie.Price" class="form-control" />
+                    <span asp-validation-for="Movie.Price" class="text-danger"></span>
+                </div>
+
+                <!-- ✅ Corrected Thumbnail Preview -->
+                <div class="form-group mt-3">
+                    <label>Current Thumbnail:</label>
+                    <div class="border rounded-lg p-3 bg-light">
+                        <img src="@(string.IsNullOrEmpty(Model.Movie.ThumbnailUrl)
+                                      ? Url.Content("/images/movies/placeholder.png")
+                                      : Url.Content(Model.Movie.ThumbnailUrl))"
+                             alt="Thumbnail Preview"
+                             class="img-fluid"
+                             style="max-height: 300px; object-fit: contain;">
+                    </div>
+                </div>
+
+                <!-- Thumbnail Upload -->
+                <div class="form-group mt-3">
+                    <label for="thumbnail">Upload New Thumbnail</label>
+                    <input type="file" name="ThumbnailImage" class="form-control-file" accept="image/*" />
+                </div>
+
+                <div class="form-group mt-3">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                    <a asp-page="./Index" class="btn btn-secondary">Back to List</a>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
